@@ -21,6 +21,7 @@ Close,
 (Close - LAG(Close) OVER (ORDER BY STR_TO_DATE(Date, '%m/%d/%Y')))
 / LAG(Close) OVER (ORDER BY STR_TO_DATE(Date, '%m/%d/%Y')) AS Daily_Return
 FROM nke;
+![Daily Returns](SQL/sql1.png)
  Insight:
 
 Most daily returns are small and close to zero, indicating stable price movements, with occasional spikes showing volatility.
@@ -39,7 +40,7 @@ FROM nke
 ) t
 GROUP BY Year
 ORDER BY Volatility DESC;
-
+![Volatility](SQL/sql2.png)
 
 
 High volatility is observed during crisis periods (e.g., early 2000s, 2008, COVID-19), indicating increased market uncertainty.
@@ -52,6 +53,10 @@ SELECT
    WHERE YEAR(STR_TO_DATE(Date, '%m/%d/%Y')) = 2010 
    ORDER BY STR_TO_DATE(Date, '%m/%d/%Y') LIMIT 1)
 ) * 1000 AS Final_Value;
+
+![ROI](SQL/sql3.png)
+
+
 A long-term investment shows significant growth, demonstrating the strength of a buy-and-hold strategy.
 ## What is the logic behind your trading strategy?
 
@@ -99,6 +104,9 @@ SELECT
     
 FROM trades;
 
+
+![Sharpe Ratio](SQL/sql4.png)
+
 “I developed a SQL-based trading strategy that buys Nike stock after significant price drops and evaluates performance using metrics like win rate, average return, and total return. The strategy achieved a 53% win rate and 159% cumulative return, demonstrating how data-driven approaches can identify profitable market inefficiencies.”
 ## How are buy and sell signals generated in your trading strategy?
 
@@ -123,6 +131,10 @@ FROM (
 GROUP BY trade_signal;
 -- “I evaluated trading signals not just on next-day returns but by simulating multi-day holding periods, which better reflects real trading behavior.”
 
+
+![Crash Detection](SQL/sql5.png)
+
+
 ## How did you detect market crashes in your analysis?
 SELECT 
     STR_TO_DATE(Date, '%m/%d/%Y') AS Date,
@@ -146,6 +158,8 @@ FROM (
 WHERE Daily_Return < -0.05
 ORDER BY Date;
 
+
+![Strategy Comparison](SQL/sql6.png)
 
 -- “I identified extreme downside events in Nike stock using SQL by filtering daily returns below -5%.
 -- The analysis revealed clustering during major economic crises like 2008 and COVID-19, and showed how recovery speed differs across periods.
