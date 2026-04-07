@@ -216,7 +216,7 @@ The distribution of daily returns represents how frequently different percentage
 
   ## What does the profit vs loss distribution indicate about the strategy?
 
-![chart](images/chart12.png)
+ ![chart](images/chart12.png)
 
 
 
@@ -224,7 +224,7 @@ The distribution of daily returns represents how frequently different percentage
 
 ## Is the strategy consistently good, or does it fail over time?
 
-![chart](images/chart11.png)
+ ![chart](images/chart11.png)
 
 
 “I used rolling Sharpe ratio to analyze time-based performance. The strategy showed high volatility and frequent negative Sharpe values, indicating inconsistent and unreliable performance across different time periods.”
