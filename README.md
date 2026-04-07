@@ -270,7 +270,7 @@ Dynamic Dashboards: Developed an interactive Tableau workbook that visualizes th
 
 Trend Decomposition: Created visual overlays of short-term (50-day) vs. long-term (200-day) moving averages to highlight "Golden Cross" and "Death Cross" events in Nike’s history.
 
-3. Critical Business Insights & Strategic Findings
+## 3. Critical Business Insights & Strategic Findings
 The analysis moved beyond descriptive statistics to provide high-level business intelligence:
 
 The 2021 Peak & Correction: The data identifies November 2021 as a historical high-water mark for NKE. The subsequent decline was not a random event but a structured "Market Correction" phase. Recognizing these patterns allows for better timing of capital entry and exit.
@@ -283,7 +283,7 @@ Strategy Recommendation: For high-growth assets like Nike, the data suggests tha
 
 Volatility as a Risk Signal: The analysis detected that "High Volatility" days (price swings > 3%) often cluster during specific economic cycles. This insight is vital for institutional risk management and setting stop-loss parameters.
 
-4. Professional Challenges & Solutions
+## 4. Professional Challenges & Solutions
 A key indicator of high-level expertise is the ability to overcome complex data hurdles:
 
 Challenge: Data Type Inconsistency.
@@ -294,15 +294,30 @@ Challenge: Signal Noise in Daily Returns.
 
 Solution: Daily price movements are often erratic. I implemented "Smoothing Functions" through moving averages to extract the underlying trend, allowing for a clearer view of Nike’s long-term value proposition.
 
-5. Professional Conclusion
+## 5. Professional Conclusion
 This project serves as a definitive demonstration of the intersection between Data Science and Financial Strategy. By successfully managing the full data lifecycle—from ingestion and cleaning to advanced modeling and visual storytelling—this analysis provides a blueprint for evidence-based decision-making.
 
 The findings emphasize that while technical analysis tools like RSI and Moving Averages are powerful for risk mitigation, the long-term fundamentals of Nike Inc. support a structured investment approach. This study proves a readiness to handle large-scale financial datasets and translate them into the clear, actionable narratives required for executive-level leadership and institutional growth.
 
-6. Technical Skills Demonstrated
+## 6. Technical Skills Demonstrated
 Languages: SQL (MySQL), Python (Pandas, NumPy, Matplotlib, Seaborn)
 
 Tools: Tableau Desktop, Jupyter Notebooks, Excel/CSV Data Engineering
 
 Finance Competencies: Time-Series Forecasting, Technical Indicator Development, Risk/Return Analysis, Backtesting Methodologies, Market Cycle Identification.
-## How effective are simple trading strategies compared to long-term investing?
+## Conclusion
+
+This project demonstrates a comprehensive analysis of Nike stock by combining data analytics, financial modeling, and visualization techniques. The study highlights that Nike exhibits strong long-term growth with identifiable market cycles, including a peak around 2021 followed by a correction phase.
+
+Through quantitative analysis, it was observed that while technical trading strategies such as moving average crossovers can generate signals and maintain moderate accuracy, they fail to outperform a simple buy-and-hold approach. This reinforces the importance of long-term investment strategies in trending markets.
+
+The analysis also reveals that volatility and market crashes are not random but occur during major economic events, making risk management a critical component of investment decision-making. By leveraging SQL, Python, and Tableau, the project successfully transforms raw financial data into actionable insights.
+
+Overall, this project demonstrates the ability to:
+
+Analyze large-scale financial datasets
+Apply statistical and time-series techniques
+Evaluate trading strategies using data-driven methods
+Communicate insights effectively through dashboards and visualizations
+
+The key takeaway is that long-term market alignment and disciplined investment strategies outperform frequent trading in high-growth stocks like Nike.
