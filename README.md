@@ -22,9 +22,32 @@ Exploratory Data Analysis (EDA): Performed distribution analysis on trading volu
 Technical Indicator Development: Engineered the Relative Strength Index (RSI) and Moving Average Convergence Divergence (MACD) logic to define "Overbought" and "Oversold" market conditions.
 
 Volatility Modeling: Calculated rolling standard deviations of returns to identify periods of "Volatility Clustering," providing a quantitative metric for market risk.
+1. How can data-driven analysis of historical stock performance be used to evaluate return, risk, and strategy effectiveness for investment decision-making?
+   ![chart](images/chart1.png)
+   ![chart](images/chart2.png)
+ Insights
+## The dataset used in this analysis consists of 6,559 records spanning from January 3, 2000 to January 30, 2026, providing a comprehensive long-term view of stock price behavior. 
 
+It includes key financial variables such as open, close, high, low prices, trading volume, and several engineered features like moving averages, RSI, MACD, and machine learning signals
+.
+Over the observed period, the stock demonstrates a strong long-term upward trend, with the lowest recorded price at approximately 2.47 and the highest reaching 166.25, indicating significant growth potential over time.
 
-How can we use data to determine whether Nike stock is a good investment and when to buy or sell it?
+The average closing price is around 42.20 with a high standard deviation, reflecting substantial volatility in price movements.
+
+The average daily return is relatively small at approximately 0.06%, but the presence of extreme values, such as a maximum gain of 15.53% and a maximum loss of -19.98%, highlights the unpredictable and volatile nature of the market.
+
+The best performing day occurred on June 25, 2021, where the stock experienced a sharp increase of over 15%, supported by strong momentum and high trading volume, with RSI values indicating an overbought condition. 
+
+In contrast, the worst performing day was observed on June 28, 2024, with a nearly 20% decline, accompanied by extremely high trading volume and an RSI value indicating an oversold condition, suggesting panic selling or adverse market events.
+
+Moving average indicators, particularly the 50-day and 200-day averages, were effective in identifying trends, where crossovers signaled bullish or bearish market conditions. 
+
+Additional technical indicators such as RSI and MACD provided further insights into momentum and potential reversal points, enhancing the robustness of the analysis.
+
+Several trading strategies were implemented, including basic moving average strategies, filtered signals, advanced strategies using RSI and MACD, and risk-controlled approaches using stop-loss and take-profit mechanisms.
+
+These strategies demonstrated moderate profitability, with cumulative returns generally exceeding the baseline while managing risk more effectively than raw market exposure.
+
 
 C. Strategic Visualization (Tableau)
 To bridge the gap between technical output and executive understanding:
