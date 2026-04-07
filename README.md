@@ -158,7 +158,6 @@ FROM (
 WHERE Daily_Return < -0.05
 ORDER BY Date;
 
-
 ![Strategy Comparison](SQL/sql6.png)
 
 -- “I identified extreme downside events in Nike stock using SQL by filtering daily returns below -5%.
