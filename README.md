@@ -237,6 +237,33 @@ The distribution of daily returns represents how frequently different percentage
 The analysis shows that Nike stock exhibits strong long-term growth with periods of volatility, where most daily returns are small but occasional extreme values indicate market risk. Price-related features are highly correlated, confirming consistent trend behavior, while volatility analysis highlights both stable periods and sudden spikes in uncertainty. Despite these insights, the trading strategy underperforms the market because it fails to capture major trends, has a poor risk-reward balance where losses outweigh profits, and shows inconsistent performance over time. Even after improvements, the strategy remains too restrictive and lacks strong predictive features, emphasizing the need for better feature engineering and alignment with market trends.
 
 ## C. Strategic Visualization (Tableau)
+![Dashboard](dashboard/dashboard.png)
+
+Stock Trend Analysis
+Nike stock shows strong long-term growth from 2000 to 2021
+A clear peak is observed around 2021
+Post-2021, the stock enters a correction phase indicating market cycles
+Moving Average Signals (BUY/SELL)
+BUY signals occur when short-term average crosses above long-term average
+SELL signals occur when it crosses below
+Helps identify entry and exit points effectively
+Daily Returns & Volatility
+Most daily returns are small, indicating stable behavior
+Sudden spikes represent high volatility periods
+Volatility increases during uncertain market conditions
+Drawdown Analysis (Risk)
+Significant drawdowns observed during major events (2008, COVID-19)
+Highlights downside risk even in a growing stock
+Useful for understanding worst-case scenarios
+Monthly Performance Heatmap
+Shows variation in returns across months
+Indicates potential seasonal trends in stock performance
+Helps identify strong and weak periods
+Trading vs Investment Insight
+Frequent trading signals exist, but long-term holding performs better
+Confirms that buy-and-hold strategy captures overall growth
+Short-term strategies may miss major trends
+
 To bridge the gap between technical output and executive understanding:
 
 Dynamic Dashboards: Developed an interactive Tableau workbook that visualizes the relationship between volume spikes and price reversals.
