@@ -1,11 +1,11 @@
-Strategic Financial Analysis: Nike Inc. (NKE) Market Intelligence & Quantitative Modeling
+## Strategic Financial Analysis: Nike Inc. (NKE) Market Intelligence & Quantitative Modeling
 1. Executive Mission Statement
 The objective of this comprehensive study is to transform 25 years of raw Nike (NKE) historical stock data into a strategic roadmap for investment decision-making. In a market characterized by high noise and cyclicality, this project utilizes a high-performance data stack—comprising SQL, Python, and Tableau—to engineer features that distinguish market signals from random fluctuations. The ultimate goal is to provide a data-backed evaluation of risk-adjusted returns and the efficacy of algorithmic trading vs. traditional asset management.
 
 2. Technical Architecture & Methodology
 To ensure the highest level of analytical rigor, a multi-disciplinary technical approach was implemented:
 
-A. Data Engineering & Schema Optimization (SQL)
+## A. Data Engineering & Schema Optimization (SQL)
 The foundation of the project rests on advanced data manipulation within a relational database environment.
 
 Temporal Normalization: Developed custom scripts using STR_TO_DATE to convert legacy string formats into standardized ISO-8601 datetime objects, enabling complex time-series queries.
@@ -14,7 +14,145 @@ Window Function Implementation: Leveraged LAG() and LEAD() functions to calculat
 
 Rolling Aggregations: Utilized AVG() OVER with specific frame clauses (ROWS BETWEEN 49 PRECEDING AND CURRENT ROW) to calculate 50-day moving averages directly within the database layer for maximum efficiency.
 
-B. Quantitative Analysis & Feature Engineering (Python)
+## 1. How did the stock change day-to-day (Daily Returns)?
+SELECT
+STR_TO_DATE(Date, '%m/%d/%Y') AS Date,
+Close,
+(Close - LAG(Close) OVER (ORDER BY STR_TO_DATE(Date, '%m/%d/%Y')))
+/ LAG(Close) OVER (ORDER BY STR_TO_DATE(Date, '%m/%d/%Y')) AS Daily_Return
+FROM nke;
+ Insight:
+
+Most daily returns are small and close to zero, indicating stable price movements, with occasional spikes showing volatility.
+
+##  Which periods had the highest risk (Volatility)?
+
+SELECT
+YEAR(Date) AS Year,
+STDDEV(Daily_Return) AS Volatility
+FROM (
+SELECT
+STR_TO_DATE(Date, '%m/%d/%Y') AS Date,
+(Close - LAG(Close) OVER (ORDER BY STR_TO_DATE(Date, '%m/%d/%Y')))
+/ LAG(Close) OVER (ORDER BY STR_TO_DATE(Date, '%m/%d/%Y')) AS Daily_Return
+FROM nke
+) t
+GROUP BY Year
+ORDER BY Volatility DESC;
+
+
+
+High volatility is observed during crisis periods (e.g., early 2000s, 2008, COVID-19), indicating increased market uncertainty.
+
+## If I invested 1000 dollars in 2010, what would it be today?
+SELECT
+1000 AS Initial_Investment,
+( (SELECT Close FROM nke ORDER BY STR_TO_DATE(Date, '%m/%d/%Y') DESC LIMIT 1) /
+  (SELECT Close FROM nke 
+   WHERE YEAR(STR_TO_DATE(Date, '%m/%d/%Y')) = 2010 
+   ORDER BY STR_TO_DATE(Date, '%m/%d/%Y') LIMIT 1)
+) * 1000 AS Final_Value;
+A long-term investment shows significant growth, demonstrating the strength of a buy-and-hold strategy.
+## What is the logic behind your trading strategy?
+
+-- Build complete trading strategy in SQL 
+WITH base AS (
+    SELECT 
+        STR_TO_DATE(Date, '%m/%d/%Y') AS Date,
+        Close
+    FROM nke
+),
+
+returns AS (
+    SELECT 
+        Date,
+        Close,
+        
+        (Close - LAG(Close) OVER (ORDER BY Date)) 
+        / LAG(Close) OVER (ORDER BY Date) AS Daily_Return,
+        
+        LEAD(Close, 30) OVER (ORDER BY Date) AS Sell_Price
+    FROM base
+),
+
+trades AS (
+    SELECT 
+        Date AS Buy_Date,
+        Close AS Buy_Price,
+        Sell_Price,
+        
+        (Sell_Price - Close) / Close AS Trade_Return
+        
+    FROM returns
+    WHERE Daily_Return < -0.05
+)
+
+SELECT 
+    COUNT(*) AS Total_Trades,
+    
+    AVG(Trade_Return) AS Avg_Return,
+    
+    SUM(CASE WHEN Trade_Return > 0 THEN 1 ELSE 0 END) 
+    / COUNT(*) AS Win_Rate,
+    
+    SUM(Trade_Return) AS Total_Return
+    
+FROM trades;
+
+“I developed a SQL-based trading strategy that buys Nike stock after significant price drops and evaluates performance using metrics like win rate, average return, and total return. The strategy achieved a 53% win rate and 159% cumulative return, demonstrating how data-driven approaches can identify profitable market inefficiencies.”
+## How are buy and sell signals generated in your trading strategy?
+
+SELECT 
+    trade_signal,
+    COUNT(*) AS total_signals
+FROM (
+    SELECT 
+        STR_TO_DATE(Date, '%m/%d/%Y') AS dt,
+        Close,
+        
+        CASE 
+            WHEN Close > AVG(Close) OVER (
+                ORDER BY STR_TO_DATE(Date, '%m/%d/%Y')
+                ROWS BETWEEN 49 PRECEDING AND CURRENT ROW
+            ) THEN 'BUY'
+            ELSE 'SELL'
+        END AS trade_signal
+        
+    FROM nke
+) t
+GROUP BY trade_signal;
+-- “I evaluated trading signals not just on next-day returns but by simulating multi-day holding periods, which better reflects real trading behavior.”
+
+## How did you detect market crashes in your analysis?
+SELECT 
+    STR_TO_DATE(Date, '%m/%d/%Y') AS Date,
+    Close,
+    
+    (Close - LAG(Close) OVER (ORDER BY STR_TO_DATE(Date, '%m/%d/%Y')))
+    / LAG(Close) OVER (ORDER BY STR_TO_DATE(Date, '%m/%d/%Y')) AS Daily_Return
+
+FROM nke;
+SELECT *
+FROM (
+    SELECT 
+        STR_TO_DATE(Date, '%m/%d/%Y') AS Date,
+        Close,
+        
+        (Close - LAG(Close) OVER (ORDER BY STR_TO_DATE(Date, '%m/%d/%Y')))
+        / LAG(Close) OVER (ORDER BY STR_TO_DATE(Date, '%m/%d/%Y')) AS Daily_Return
+
+    FROM nke
+) t
+WHERE Daily_Return < -0.05
+ORDER BY Date;
+
+
+-- “I identified extreme downside events in Nike stock using SQL by filtering daily returns below -5%.
+-- The analysis revealed clustering during major economic crises like 2008 and COVID-19, and showed how recovery speed differs across periods.
+-- This helps in building risk-aware investment strategies.”
+
+
+## B. Quantitative Analysis & Feature Engineering (Python)
 Using the Jupyter ecosystem, the raw data was subjected to rigorous statistical testing:
 
 Exploratory Data Analysis (EDA): Performed distribution analysis on trading volume and price spreads to identify anomalies and historical outliers.
@@ -22,14 +160,15 @@ Exploratory Data Analysis (EDA): Performed distribution analysis on trading volu
 Technical Indicator Development: Engineered the Relative Strength Index (RSI) and Moving Average Convergence Divergence (MACD) logic to define "Overbought" and "Oversold" market conditions.
 
 Volatility Modeling: Calculated rolling standard deviations of returns to identify periods of "Volatility Clustering," providing a quantitative metric for market risk.
-1. How can data-driven analysis of historical stock performance be used to evaluate return, risk, and strategy effectiveness for investment decision-making?
+## 1. How can data-driven analysis of historical stock performance be used to evaluate return, risk, and strategy effectiveness for investment decision-making?
    ![chart](images/chart1.png)
    ![chart](images/chart2.png)
+## Can a data-driven trading strategy outperform a simple buy-and-hold investment?
+ ![chart](images/chart3.png)
+ ![chart](images/chart4.png)
  Insights
-## The dataset used in this analysis consists of 6,559 records spanning from January 3, 2000 to January 30, 2026, providing a comprehensive long-term view of stock price behavior. 
-
+The dataset used in this analysis consists of 6,559 records spanning from January 3, 2000 to January 30, 2026, providing a comprehensive long-term view of stock price behavior. 
 It includes key financial variables such as open, close, high, low prices, trading volume, and several engineered features like moving averages, RSI, MACD, and machine learning signals
-.
 Over the observed period, the stock demonstrates a strong long-term upward trend, with the lowest recorded price at approximately 2.47 and the highest reaching 166.25, indicating significant growth potential over time.
 
 The average closing price is around 42.20 with a high standard deviation, reflecting substantial volatility in price movements.
@@ -47,9 +186,44 @@ Additional technical indicators such as RSI and MACD provided further insights i
 Several trading strategies were implemented, including basic moving average strategies, filtered signals, advanced strategies using RSI and MACD, and risk-controlled approaches using stop-loss and take-profit mechanisms.
 
 These strategies demonstrated moderate profitability, with cumulative returns generally exceeding the baseline while managing risk more effectively than raw market exposure.
+ ## What does the distribution of daily returns represent?
+ ![chart](images/chart7.png)
+
+The distribution of daily returns represents how frequently different percentage changes in stock price occur, showing whether most price movements are small or if there are significant gains or losses.
+## What does the correlation heatmap reveal about the relationships between features in the dataset?
+ ![chart](images/chart8.png)
 
 
-C. Strategic Visualization (Tableau)
+ The correlation heatmap shows that price-related features like Close, Open, High, Low, and moving averages are highly positively correlated, meaning they move together and provide similar information. In contrast, volume-related features have weak correlation with price, indicating they behave more independently. This helps identify important features and remove redundancy for better model building.
+
+ ## What does the volatility plot indicate about the stock’s behavior over time?
+  ![chart](images/chart8.png)
+
+  The volatility plot shows how the stock’s risk changes over time using a rolling 10-day standard deviation of daily returns. Low volatility indicates stable market conditions with small price movements, while high volatility spikes represent periods of uncertainty and large price fluctuations. Overall, the stock is mostly stable but experiences occasional high-risk periods.
+
+  ## What does the profit vs loss distribution indicate about the strategy?
+
+![chart](images/chart12.png)
+
+
+
+“I analyzed the profit vs loss distribution and found significant overlap between gains and losses, indicating weak predictive power. Additionally, losses are slightly larger than profits, which results in a negative overall return despite a near 50% win rate. This highlights a poor risk-reward structure and explains why the strategy underperforms.”
+
+## Is the strategy consistently good, or does it fail over time?
+
+![chart](images/chart11.png)
+
+
+“I used rolling Sharpe ratio to analyze time-based performance. The strategy showed high volatility and frequent negative Sharpe values, indicating inconsistent and unreliable performance across different time periods.”
+
+
+## How does the analysis of stock trends, returns distribution, volatility, correlation, and strategy performance explain the behavior of Nike stock and why does the trading strategy underperform compared to the market?
+![chart](images/chart14.png)
+![chart](images/chart15.png)
+
+The analysis shows that Nike stock exhibits strong long-term growth with periods of volatility, where most daily returns are small but occasional extreme values indicate market risk. Price-related features are highly correlated, confirming consistent trend behavior, while volatility analysis highlights both stable periods and sudden spikes in uncertainty. Despite these insights, the trading strategy underperforms the market because it fails to capture major trends, has a poor risk-reward balance where losses outweigh profits, and shows inconsistent performance over time. Even after improvements, the strategy remains too restrictive and lacks strong predictive features, emphasizing the need for better feature engineering and alignment with market trends.
+
+## C. Strategic Visualization (Tableau)
 To bridge the gap between technical output and executive understanding:
 
 Dynamic Dashboards: Developed an interactive Tableau workbook that visualizes the relationship between volume spikes and price reversals.
@@ -91,3 +265,4 @@ Languages: SQL (MySQL), Python (Pandas, NumPy, Matplotlib, Seaborn)
 Tools: Tableau Desktop, Jupyter Notebooks, Excel/CSV Data Engineering
 
 Finance Competencies: Time-Series Forecasting, Technical Indicator Development, Risk/Return Analysis, Backtesting Methodologies, Market Cycle Identification.
+## How effective are simple trading strategies compared to long-term investing?
