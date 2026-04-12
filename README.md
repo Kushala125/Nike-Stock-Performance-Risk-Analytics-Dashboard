@@ -210,7 +210,7 @@ The distribution of daily returns represents how frequently different percentage
  The correlation heatmap shows that price-related features like Close, Open, High, Low, and moving averages are highly positively correlated, meaning they move together and provide similar information. In contrast, volume-related features have weak correlation with price, indicating they behave more independently. This helps identify important features and remove redundancy for better model building.
 
  ## What does the volatility plot indicate about the stock’s behavior over time?
-  ![chart](images/chart8.png)
+  ![chart](images/chart9.png)
 
   The volatility plot shows how the stock’s risk changes over time using a rolling 10-day standard deviation of daily returns. Low volatility indicates stable market conditions with small price movements, while high volatility spikes represent periods of uncertainty and large price fluctuations. Overall, the stock is mostly stable but experiences occasional high-risk periods.
 
